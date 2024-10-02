@@ -17,14 +17,14 @@ public class Philosopher extends Thread {
     }
 
     private void think() throws InterruptedException {
-        System.out.println("M."+this.getName()+" pense... ");
-        sleep(delai+new Random().nextInt(delai+1));
-        System.out.println("M."+this.getName()+" arrête de penser");
+        System.out.println("M." + this.getName() + " pense... ");
+        sleep(delai + new Random().nextInt(delai + 1));
+        System.out.println("M." + this.getName() + " arrête de penser");
     }
 
     private void eat() throws InterruptedException {
-        System.out.println("M."+this.getName() + " mange...");
-        sleep(delai+new Random().nextInt(delai+1));
+        System.out.println("M." + this.getName() + " mange...");
+        sleep(delai + new Random().nextInt(delai + 1));
         //System.out.println("M."+this.getName()+" arrête de manger");
     }
 
@@ -34,32 +34,35 @@ public class Philosopher extends Thread {
             try {
                 think();
                 // Aléatoirement prendre la baguette de gauche puis de droite ou l'inverse
-                switch(new Random().nextInt(2)) {
+                switch (new Random().nextInt(2)) {
                     case 0:
                         myLeftStick.take();
                         think(); // pour augmenter la probabilité d'interblocage
                         //myRightStick.take();
                         if (myRightStick.take()) {
-                            wait(delai);
-                            if (myRightStick.take()){
-                                myLeftStick.release();
-                            }
-                        } else {
-                            myRightStick.take();
                             eat();
+                        } else {
+                            wait(delai);
+                            if (myRightStick.take()) {
+                                eat();
+                            } else {
+                                myRightStick.release();
+                            }
                         }
+
                         break;
                     case 1:
                         myRightStick.take();
                         think(); // pour augmenter la probabilité d'interblocage
-                        if (myLeftStick.take()){
+                        if (myLeftStick.take()) {
+                            eat();
+                        }else{
                             wait(delai);
-                            if (myLeftStick.take()){
+                            if (myRightStick.take()){
+                                eat();
+                            }else{
                                 myRightStick.release();
                             }
-                        }else{
-                            myLeftStick.take();
-                            eat();
                         }
                 }
                 // On libère les baguettes :

@@ -11,7 +11,7 @@ public class ChopStick {
 
     synchronized public boolean take() throws InterruptedException {
         while (!iAmFree) {
-            wait(1000);
+            wait(500);
             if (iAmFree){
                 return false;
             }
