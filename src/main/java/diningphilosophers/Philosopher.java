@@ -38,15 +38,30 @@ public class Philosopher extends Thread {
                     case 0:
                         myLeftStick.take();
                         think(); // pour augmenter la probabilité d'interblocage
-                        myRightStick.take();
+                        //myRightStick.take();
+                        if (myRightStick.take()) {
+                            wait(delai);
+                            if (myRightStick.take()){
+                                myLeftStick.release();
+                            }
+                        } else {
+                            myRightStick.take();
+                            eat();
+                        }
                         break;
                     case 1:
                         myRightStick.take();
                         think(); // pour augmenter la probabilité d'interblocage
-                        myLeftStick.take();
+                        if (myLeftStick.take()){
+                            wait(delai);
+                            if (myLeftStick.take()){
+                                myRightStick.release();
+                            }
+                        }else{
+                            myLeftStick.take();
+                            eat();
+                        }
                 }
-                // Si on arrive ici, on a pu "take" les 2 baguettes
-                eat();
                 // On libère les baguettes :
                 myLeftStick.release();
                 myRightStick.release();
