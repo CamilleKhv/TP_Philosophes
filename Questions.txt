@@ -1,0 +1,8 @@
+Il y a 3 baguettes pour 3 personnes.
+
+
+1) Des blocs synchronisés et les fonctions `wait()` / `notifyAll()`sont utilisés pour s'assurer la gestion
+des accès aux baguettes.
+
+2) Il s'agit d'une deadlock car chaque philosophe attend une baguette prise 
+par un autre et la situation ne peut se débloquer.
